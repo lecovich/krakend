@@ -123,7 +123,7 @@ func yamlRender(c *gin.Context, response *proxy.Response) {
 
 func noopRender(c *gin.Context, response *proxy.Response) {
 	if response == nil {
-		c.Status(http.StatusTeapot)
+		c.Status(http.StatusInternalServerError)
 		return
 	}
 	c.Status(response.Metadata.StatusCode)

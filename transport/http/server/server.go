@@ -10,6 +10,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/devopsfaith/krakend-ratelimit"
 	"github.com/devopsfaith/krakend/config"
 	"github.com/devopsfaith/krakend/core"
 )
@@ -17,9 +18,12 @@ import (
 // ToHTTPError translates an error into a HTTP status code
 type ToHTTPError func(error) int
 
-// DefaultToHTTPError is a ToHTTPError transalator that always returns an
-// internal server error
-func DefaultToHTTPError(_ error) int {
+// DefaultToHTTPError is a ToHTTPError translator that always returns an
+// error code depending on error type
+func DefaultToHTTPError(err error) int {
+	if err == krakendrate.ErrLimited {
+		return http.StatusTooManyRequests
+	}
 	return http.StatusInternalServerError
 }
 
